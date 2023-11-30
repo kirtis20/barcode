@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <p>Select an Indian State:</p>
+        <select id="stateDropdown">
+            <option value="None">Select a state</option>
+            <option value="Andaman and Nicobar Island">Andaman and Nicobar Island</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Daman and Diu">Daman and Diu</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal Pradesh">Himachal Pradesh</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Puducherry">Puducherry</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+        <p>Enter your text or URL</p>
+        <input type="text" placeholder="for eg. MH04AZ2843" id="qrText">
+        <div id="imgBox">
+            <img src="" id="qrImage">
+        </div>
+        <button onclick="generateQR()"> Generate QR Code</button>
+        <button id="downloadButton" onclick="downloadQR()">Download QR Code</button>
+    </div>
+
+    <script>
+        let imgBox = document.getElementById("imgBox");
+        let qrImage = document.getElementById("qrImage");
+        let qrText = document.getElementById("qrText")
+        let qrTe
+        function generateQR() {
+            if (qrText.value.length == 10) {
+                qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + qrText.value;
+                imgBox.classList.add("show-img")
+            }
+            else{
+                qrText.classList.add('error');
+                setTimeout(()=>{
+                    qrText.classList.remove('error');
+                },1000);
+            }
+        }
+        
+    
+        function downloadQR() {
+    if (qrImage.src) {
+        fetch(qrImage.src)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'qr_code.png'; // Set the desired filename
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+    }
+}
+
+
+
+    let stateDropdown = document.getElementById("stateDropdown");
+
+    // Define a mapping of state names to state codes
+    const stateCodeMap = {
+        "Andhra Pradesh": "AP",
+        "Arunachal Pradesh": "AR",
+        "Assam": "AS",
+        "Bihar":"BR",
+        "Chattisgarh":"CG",
+        "Delhi":"DL",
+        "Goa":"GA",
+        "Gujarat":"GJ",
+        "Haryana":"HR",
+        "Himachal Pradesh":"HP",
+        "Jammu and Kashmir":"JK",
+        "Jharkhand":"JH",
+        "Karnataka":"KA",
+        "Kerala":"KL",
+        "Lakshadweep Islands":"LD",
+        "Madhya Pradesh":"MP",
+        "Maharashtra":"MH",
+        "Manipur":"MN",
+        "Meghalaya":"ML",
+        "Mizoram":"MZ",
+        "Nagaland":"NL",
+        "Odisha":"OD",
+        "Pondicherry":"PY",
+        "Punjab":"PB",
+        "Rajasthan":"RJ",
+        "Sikkim":"SK",
+        "Tamil Nadu":"TN",
+        "Telangana":"TS",
+        "Tripura":"TR",
+        "Uttar Pradesh":"UP",
+        "Uttarakhand":"UK",
+        "West Bengal":"WB",
+        "Andaman and Nicobar Islands":"AN",
+        "Chandigarh":"CH",
+        "Daman & Diu":"DD",
+
+        
+        // Add other states and codes here
+    };
+
+    // Add an event listener to the dropdown to update the text input
+    stateDropdown.addEventListener("change", function () {
+        let selectedState = stateDropdown.value;
+        let stateCode = stateCodeMap[selectedState]; // Get the state code
+
+        // Update the text input with the selected state code
+        qrText.value = stateCode; // Add a space after the code
+    });
+</script>
+    
+</body>
+
+</html>
